@@ -8,9 +8,12 @@ sudo dnf remove -y \
   nano \
   nano-default-editor \
   vim-minimal \
+  libreoffice-* \
   totem \
   gnome-weather \
-  gnome-maps
+  gnome-maps \
+  gnome-photos \
+  rhythmbox
 
 echo
 echo "=== End 'purge.install.sh' ==="
