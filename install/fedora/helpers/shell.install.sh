@@ -19,6 +19,8 @@ sudo dnf install -y \
   tldr \
   exa \
   bat \
+  htop \
+  mosh \
   xclip \
   xsel \
   wl-clipboard
