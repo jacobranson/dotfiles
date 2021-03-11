@@ -4,6 +4,11 @@ echo
 echo "=== Start 'rpmfusion.install.sh' ==="
 echo
 
+if [[ $(/usr/bin/id -u) -ne 0 ]]; then
+  echo "This script must be executed as root."
+  exit
+fi
+
 RPM_FUSION_FREE=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 RPM_FUSION_NONFREE=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
