@@ -1,0 +1,6 @@
+[pull]
+	rebase = false
+
+[user]
+	name = Jacob Ranson
+	email = jacobrileighranson@gmail.com
