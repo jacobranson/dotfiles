@@ -12,6 +12,7 @@ fi
 sudo dnf install -y \
   util-linux-user \
   neofetch \
+  byobu \
   fish \
   starship \
   micro \
