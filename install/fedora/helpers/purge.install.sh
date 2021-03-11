@@ -4,7 +4,7 @@ echo
 echo "=== Start 'purge.install.sh' ==="
 echo
 
-dnf remove -y \
+sudo dnf remove -y \
   nano \
   nano-default-editor \
   vim-minimal \

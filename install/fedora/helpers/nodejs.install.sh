@@ -4,7 +4,7 @@ echo
 echo "=== Start 'nodejs.install.sh' ==="
 echo
 
-dnf install -y nodejs
+sudo dnf install -y nodejs
 npm config set prefix ~/.local
 
 echo

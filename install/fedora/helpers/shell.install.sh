@@ -4,7 +4,7 @@ echo
 echo "=== Start 'shell.install.sh' ==="
 echo
 
-dnf install -y \
+sudo dnf install -y \
   util-linux-user \
   neofetch \
   fish \
