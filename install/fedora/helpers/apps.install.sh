@@ -4,7 +4,7 @@ echo
 echo "=== Start 'apps.install.sh' ==="
 echo
 
-flatpak install flathub \
+flatpak install -y flathub \
   org.freedesktop.Platform.ffmpeg-full \
   org.gnome.Lollypop \
   io.github.celluloid_player.Celluloid \
