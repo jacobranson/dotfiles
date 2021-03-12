@@ -27,6 +27,7 @@ sudo dnf install -y \
 
 chsh jacob -s $(which fish)
 fish -c "set -Ux EDITOR (which micro)"
+fish -c "set -U fish_greeting"
 
 echo
 echo "=== End 'shell.install.sh' ==="
