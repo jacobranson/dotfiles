@@ -21,6 +21,7 @@ sudo dnf install -y \
   bat \
   htop \
   mosh \
+  fzf \
   xclip \
   xsel \
   wl-clipboard
