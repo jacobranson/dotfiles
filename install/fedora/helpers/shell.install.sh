@@ -22,6 +22,7 @@ sudo dnf install -y \
   htop \
   mosh \
   fzf \
+  asciinema \
   xclip \
   xsel \
   wl-clipboard
