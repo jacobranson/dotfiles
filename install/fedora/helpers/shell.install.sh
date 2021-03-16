@@ -22,6 +22,7 @@ sudo dnf install -y \
   htop \
   mosh \
   fzf \
+  fd-find \
   asciinema \
   xclip \
   xsel \
