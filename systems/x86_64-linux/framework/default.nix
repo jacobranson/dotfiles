@@ -18,8 +18,11 @@ in {
   # linux kernel version to use
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # ensure the system can boot
-  boot.loader.systemd-boot.enable = true;
+  # Lanzaboote currently replaces the systemd-boot module.
+  # This setting is usually set to true in configuration.nix
+  # generated at installation time. So we force it to false
+  # for now.
+  boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # ensure the system can connect to the internet
@@ -106,12 +109,6 @@ in {
       openssh.authorizedKeys.keys = ssh-keys;
     };
   };
-
-  # Lanzaboote currently replaces the systemd-boot module.
-  # This setting is usually set to true in configuration.nix
-  # generated at installation time. So we force it to false
-  # for now.
-  boot.loader.systemd-boot.enable = lib.mkForce false;
 
   boot.lanzaboote = {
     enable = true;
