@@ -87,6 +87,24 @@ in {
   programs.dconf.profiles.gdm.databases = [{
     settings."org/gnome/desktop/interface".scaling-factor = lib.gvariant.mkUint32 2;
   }];
+  
+  # remove NixOS manual
+  documentation.nixos.enable = false;
+  
+  # remove xterm
+  services.xserver.excludePackages = [ pkgs.xterm ];
+  
+  # remove GNOME Tour
+  environment.gnome.excludePackages = [ pkgs.gnome-tour ];
+  
+  # set GNOME Web as default browser
+  xdg.mime.defaultApplications = {
+    "text/html" = "org.gnome.Epiphany.desktop";
+    "x-scheme-handler/http" = "org.gnome.Epiphany.desktop";
+    "x-scheme-handler/https" = "org.gnome.Epiphany.desktop";
+    "x-scheme-handler/about" = "org.gnome.Epiphany.desktop";
+    "x-scheme-handler/unknown" = "org.gnome.Epiphany.desktop";
+  }
 
   # enable audio via pipewire
   sound.enable = false;
@@ -109,9 +127,6 @@ in {
       noto-fonts-cjk
     ];
   };
-
-  # enable printer support
-  services.printing.enable = true;
 
   # add additional system packages to install
   environment.systemPackages = with pkgs; [
