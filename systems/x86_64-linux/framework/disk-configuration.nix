@@ -18,7 +18,7 @@ in {
     };
     nodev."/build" = {
       fsType = "tmpfs";
-      mountOptions = [ "defaults" "size=16G" "mode=755" ];
+      mountOptions = [ "defaults" "size=32G" "mode=755" ];
     };
     disk."${disk}" = {
       device = "/dev/${disk}";
