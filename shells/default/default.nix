@@ -5,7 +5,7 @@ pkgs.mkShell {
     export EDITOR=hx
 
     agenix() {
-      command agenix --rules secrets/__secrets__.nix "$@"
+      command agenix --rules ./secrets.nix "$@"
     }
 
     decrypt() {
@@ -13,7 +13,7 @@ pkgs.mkShell {
     }
 
     sysdecrypt() {
-      decrypt "secrets/systems/$hostname/$1.age"
+      decrypt "systems/$arch/$hostname/secrets/$1.age"
     }
 
     install-nixos() {

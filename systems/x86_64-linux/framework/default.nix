@@ -92,7 +92,7 @@ in {
 
   # secrets for this machine
   age.secrets = {
-    password.file = ../../../secrets/systems/${hostname}/password.age;
+    password.file = ./secrets/password.age;
   };
 
   # configure the users of this system
