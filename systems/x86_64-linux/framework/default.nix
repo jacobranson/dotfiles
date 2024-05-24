@@ -104,7 +104,7 @@ in {
     "x-scheme-handler/https" = "org.gnome.Epiphany.desktop";
     "x-scheme-handler/about" = "org.gnome.Epiphany.desktop";
     "x-scheme-handler/unknown" = "org.gnome.Epiphany.desktop";
-  }
+  };
 
   # enable audio via pipewire
   sound.enable = false;
@@ -192,6 +192,7 @@ in {
         "Templates"
         "Videos"
         { directory = ".ssh"; mode = "0700"; }
+        ".local/share/keyrings"
         ".config/dotfiles"
         ".config/gh"
       ];
