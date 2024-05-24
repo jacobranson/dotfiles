@@ -26,6 +26,21 @@ in {
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
   
+  # hides boot logs behind a loading screen
+  boot.initrd.systemd.enable = true;
+  boot.plymouth.enable = true;
+  boot.plymouth.extraConfig = "DeviceScale=2";
+  
+  # hacky way to make the system boot without showing logs.
+  # can be overridden by pressing "Escape".
+  boot.kernelParams = [ "quiet" ];
+  boot.initrd.verbose = false;
+  boot.consoleLogLevel = 0;
+
+  # hide the nixos generation boot selection menu by default.
+  # can be overridden by holding "Space".
+  boot.loader.timeout = 0;
+  
   # allows for firmware updates
   services.fwupd.enable = true;
 
@@ -62,7 +77,8 @@ in {
   };
 
   # skip the login screen and automatically login as the primary user
-  services.displayManager.autoLogin.user = user;
+  # services.displayManager.autoLogin.user = user;
+  # workaround for login crash, see https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-2094933256 (doesn't work)
 
   # enable audio via pipewire
   sound.enable = false;
