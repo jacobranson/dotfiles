@@ -80,6 +80,14 @@ in {
   # services.displayManager.autoLogin.user = user;
   # workaround for login crash, see https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-2094933256 (doesn't work)
 
+  # dconf
+  programs.dconf.enable = true;
+  
+  # hidpi
+  programs.dconf.profiles.gdm.databases = [{
+    settings."org/gnome/desktop/interface".scaling-factor = lib.gvariant.mkUint32 2;
+  }];
+
   # enable audio via pipewire
   sound.enable = false;
   hardware.pulseaudio.enable = false;
@@ -165,7 +173,6 @@ in {
       ];
       files = [
         ".bash_history"
-        ".config/monitors.xml"
       ];
     };
   };
