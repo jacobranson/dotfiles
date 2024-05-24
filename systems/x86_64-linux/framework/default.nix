@@ -24,6 +24,9 @@ in {
   # for now.
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
+  
+  # allows for firmware updates
+  services.fwupd.enable = true;
 
   # ensure the system can connect to the internet
   networking.hostName = hostname;
