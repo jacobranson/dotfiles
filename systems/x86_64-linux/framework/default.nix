@@ -113,12 +113,9 @@ in {
   # enable printer support
   services.printing.enable = true;
 
-  # disable sudo password prompts
-  security.sudo.wheelNeedsPassword = false;
-
   # add additional system packages to install
   environment.systemPackages = with pkgs; [
-    pkgs.sbctl # For debugging and troubleshooting Secure Boot.
+    sbctl # For debugging and troubleshooting Secure Boot.
     gh devbox
   ];
 
@@ -128,32 +125,44 @@ in {
   };
 
   # configure the users of this system
-  users.users = {
-    root.hashedPasswordFile = config.age.secrets.password.path;
-    "${user}" = {
-      isNormalUser = true;
-      hashedPasswordFile = config.age.secrets.password.path;
-      extraGroups = [ "wheel" "networkmanager" ];
-      openssh.authorizedKeys.keys = ssh-keys;
-    };
+  users.mutableUsers = false;
+  users.users.root.hashedPasswordFile = config.age.secrets.password.path;
+  users.users."${user}" = {
+    isNormalUser = true;
+    hashedPasswordFile = config.age.secrets.password.path;
+    extraGroups = [ "wheel" "networkmanager" ];
+    openssh.authorizedKeys.keys = ssh-keys;
   };
 
   boot.lanzaboote = {
     enable = true;
     pkiBundle = "/etc/secureboot";
   };
+  
+  # fingerprint reader support
+  # sudo fprintd-enroll $USER
 
   # configure persistent files via impermanence
-  environment.persistence."/persist" = {
+  environment.persistence.persist = {
+    persistentStoragePath = "/persist";
     hideMounts = true;
     directories = [
-      "/var/log"
-      "/var/lib/bluetooth"
+      # required by NixOS
       "/var/lib/nixos"
-      "/var/lib/systemd/coredump"
+      "/var/lib/systemd"
+      "/var/log/journal"
+      
+      # Secure Boot
       "/etc/secureboot"
+      
+      # Fingerprint Sensor
+      "/var/lib/fprint"
+      
+      # WiFi
       "/etc/NetworkManager/system-connections"
-      { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
+      
+      # Bluetooth
+      "/var/lib/bluetooth"
     ];
     files = [];
     users."${user}" = {
