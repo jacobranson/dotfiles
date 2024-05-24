@@ -7,10 +7,18 @@ let
 in {
   fileSystems."/persist".neededForBoot = true;
   
+  #services.logind.extraConfig = ''
+  #  RuntimeDirectorySize=32G
+  #'';
+  
   disko.devices = {
     nodev."/" = {
       fsType = "tmpfs";
       mountOptions = [ "defaults" "size=${root-size}" "mode=755" ];
+    };
+    nodev."/build" = {
+      fsType = "tmpfs";
+      mountOptions = [ "defaults" "size=16G" "mode=755" ];
     };
     disk."${disk}" = {
       device = "/dev/${disk}";
