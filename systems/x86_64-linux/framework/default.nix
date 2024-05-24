@@ -87,6 +87,7 @@ in {
 
   # add additional system packages to install
   environment.systemPackages = with pkgs; [
+    pkgs.sbctl # For debugging and troubleshooting Secure Boot.
     gh devbox
   ];
 
@@ -105,11 +106,6 @@ in {
       openssh.authorizedKeys.keys = ssh-keys;
     };
   };
-  
-  environment.systemPackages = [
-    # For debugging and troubleshooting Secure Boot.
-    pkgs.sbctl
-  ];
 
   # Lanzaboote currently replaces the systemd-boot module.
   # This setting is usually set to true in configuration.nix
