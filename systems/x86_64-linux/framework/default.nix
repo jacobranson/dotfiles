@@ -42,7 +42,6 @@ in {
 
   # configure the keyboard layout
   services.xserver.xkb.layout = layout;
-  console.keyMap = layout;
 
   # set the locale and timezone
   i18n.defaultLocale = locale;
@@ -51,11 +50,12 @@ in {
   # enable the GNOME desktop environment
   services.xserver = {
     enable = true;
-    libinput.enable = true;
     desktopManager.gnome.enable = true;
     displayManager.gdm.enable = true;
-    displayManager.autoLogin.user = user;
   };
+
+  # skip the login screen and automatically login as the primary user
+  services.displayManager.autoLogin.user = user;
 
   # enable audio via pipewire
   sound.enable = false;
@@ -146,5 +146,5 @@ in {
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 }
