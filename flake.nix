@@ -11,6 +11,10 @@
       url = "github:yaxitech/ragenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.3.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,6 +41,7 @@
     systems.modules.nixos = with inputs; [
       agenix.nixosModules.default
       disko.nixosModules.disko
+      lanzaboote.nixosModules.lanzaboote
       impermanence.nixosModules.impermanence
       nix-index-database.nixosModules.nix-index
       home-manager.nixosModules.home-manager
