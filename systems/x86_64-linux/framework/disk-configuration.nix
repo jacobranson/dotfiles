@@ -52,6 +52,7 @@ in {
               subvolumes = {
                 "/root" = {
                   mountpoint = "/";
+                  options = [ "subvol=root" "compress=zstd" "noatime" ];
                 };
                 "/nix" = {
                   mountpoint = "/nix";

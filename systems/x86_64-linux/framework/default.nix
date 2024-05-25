@@ -31,7 +31,6 @@ in {
   };
   
   # hides boot logs behind a loading screen
-  boot.initrd.systemd.enable = true;
   boot.plymouth.enable = true;
   boot.plymouth.extraConfig = "DeviceScale=2";
   
@@ -159,11 +158,19 @@ in {
   # configure persistent files via impermanence
   fileSystems."/persist".neededForBoot = true;
   boot.initrd.services.lvm.enable = true;
+  boot.initrd.systemd.enable = true;
   boot.initrd.systemd.services.rollback = {
     description = "Rollback BTRFS root subvolume to a pristine state";
-    requires = ["dev-root_vg-root.device"];
-    after = ["dev-root_vg-root.device"];
-    wantedBy = [ "initrd.target" ];
+    wantedBy = [
+      "initrd.target"
+    ];
+    after = [
+      # LUKS/TPM process
+      "systemd-cryptsetup@enc.service"
+    ];
+    before = [
+      "sysroot.mount"
+    ];
     unitConfig.DefaultDependencies = "no";
     serviceConfig.Type = "oneshot";
     script = ''
