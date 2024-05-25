@@ -23,8 +23,12 @@ in {
   # This setting is usually set to true in configuration.nix
   # generated at installation time. So we force it to false
   # for now.
-  boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.loader.systemd-boot.enable = lib.mkForce true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.lanzaboote = {
+    enable = false;
+    pkiBundle = "/etc/secureboot";
+  };
   
   # hides boot logs behind a loading screen
   boot.initrd.systemd.enable = true;
@@ -62,19 +66,19 @@ in {
     }];
   };
 
-  # configure the keyboard layout
-  services.xserver.xkb.layout = layout;
-
-  # set the locale and timezone
-  i18n.defaultLocale = locale;
-  time.timeZone = timezone;
-
   # enable the GNOME desktop environment
   services.xserver = {
     enable = true;
     desktopManager.gnome.enable = true;
     displayManager.gdm.enable = true;
   };
+
+  # configure the keyboard layout
+  services.xserver.xkb.layout = layout;
+
+  # set the locale and timezone
+  i18n.defaultLocale = locale;
+  time.timeZone = timezone;
 
   # skip the login screen and automatically login as the primary user
   # services.displayManager.autoLogin.user = user;
@@ -148,19 +152,12 @@ in {
     extraGroups = [ "wheel" "networkmanager" ];
     openssh.authorizedKeys.keys = ssh-keys;
   };
-
-  boot.lanzaboote = {
-    enable = true;
-    pkiBundle = "/etc/secureboot";
-  };
   
   # fingerprint reader support
   # sudo fprintd-enroll $USER
 
   # configure persistent files via impermanence
   environment.persistence.persist = {
-    persistentStoragePath = "/persist";
-    hideMounts = true;
     directories = [
       # required by NixOS
       "/var/lib/nixos"
@@ -179,7 +176,6 @@ in {
       # Bluetooth
       "/var/lib/bluetooth"
     ];
-    files = [];
     users."${user}" = {
       directories = [
         "Desktop"
