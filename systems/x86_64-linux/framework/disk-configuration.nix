@@ -52,15 +52,14 @@ in {
               subvolumes = {
                 "/root" = {
                   mountpoint = "/";
-                  mountOptions = [ "compress=zstd" "noatime" ];
                 };
                 "/nix" = {
                   mountpoint = "/nix";
-                  mountOptions = [ "compress=zstd" "noatime" ];
+                  mountOptions = [ "subvol=nix" "compress=zstd" "noatime" ];
                 };
                 "/persist" = {
                   mountpoint = "/persist";
-                  mountOptions = [ "compress=zstd" "noatime" ];
+                  mountOptions = [ "subvol=persist" "compress=zstd" "noatime" ];
                 };
                 "/swap" = {
                   mountpoint = "/swap";

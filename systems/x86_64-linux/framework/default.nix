@@ -158,15 +158,12 @@ in {
 
   # configure persistent files via impermanence
   fileSystems."/persist".neededForBoot = true;
-
+  boot.initrd.services.lvm.enable = true;
   boot.initrd.systemd.services.rollback = {
     description = "Rollback BTRFS root subvolume to a pristine state";
-    wantedBy = [
-      "initrd.target"
-    ];
-    after = [
-      "systemd-cryptsetup@enc.service" # LUKS/TPM process
-    ];
+    wantedBy = [ "initrd.target" ];
+    wants = [ "dev-root_vg-root.device" ];
+    after = [ "systemd-cryptsetup@enc.service" "dev-root_vg-root.device" ];
     before = [
       "sysroot.mount"
     ];
