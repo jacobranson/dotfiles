@@ -49,13 +49,13 @@ in {
             content = {
               type = "btrfs";
               extraArgs = [ "-f" ];
+              postCreateHook = ''
+                btrfs subvolume snapshot -r /mnt/root /mnt/root-blank
+              '';
               subvolumes = {
                 "/root" = {
                   mountpoint = "/";
                   mountOptions = [ "subvol=root" "compress=zstd" "noatime" ];
-                  postCreateHook = ''
-                    btrfs subvolume snapshot -r /mnt/root /mnt/root-blank
-                  '';
                 };
                 "/nix" = {
                   mountpoint = "/nix";
