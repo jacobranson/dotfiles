@@ -161,12 +161,9 @@ in {
   boot.initrd.services.lvm.enable = true;
   boot.initrd.systemd.services.rollback = {
     description = "Rollback BTRFS root subvolume to a pristine state";
+    requires = ["dev-root_vg-root.device"];
+    after = ["dev-root_vg-root.device"];
     wantedBy = [ "initrd.target" ];
-    wants = [ "dev-root_vg-root.device" ];
-    after = [ "systemd-cryptsetup@enc.service" "dev-root_vg-root.device" ];
-    before = [
-      "sysroot.mount"
-    ];
     unitConfig.DefaultDependencies = "no";
     serviceConfig.Type = "oneshot";
     script = ''
