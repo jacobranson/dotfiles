@@ -28,6 +28,7 @@ in {
               content = {
                 type = "luks";
                 name = "crypted";
+                settings.keyFile = "/tmp/luks.key";
                 settings.allowDiscards = true;
                 content = {
                   type = "lvm_pv";
