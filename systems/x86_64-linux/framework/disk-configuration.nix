@@ -50,7 +50,7 @@ in {
               type = "btrfs";
               extraArgs = [ "-f" ];
               postCreateHook = ''
-                btrfs subvolume snapshot -r /mnt/root /mnt/root-blank
+                btrfs subvolume snapshot -r /mnt/root /mnt/persist/root-blank
               '';
               subvolumes = {
                 "/root" = {

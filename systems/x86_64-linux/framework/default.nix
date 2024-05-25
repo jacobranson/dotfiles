@@ -202,7 +202,7 @@ in {
         echo "deleting /root subvolume..." &&
         btrfs subvolume delete /mnt/root
       echo "restoring blank /root subvolume..."
-      btrfs subvolume snapshot /mnt/root-blank /mnt/root
+      btrfs subvolume snapshot /mnt/persist/root-blank /mnt/root
       # Once we're done rolling back to a blank snapshot,
       # we can unmount /mnt and continue on the boot process.
       umount /mnt
