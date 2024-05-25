@@ -2,62 +2,68 @@
 
 let
   disk = "nvme0n1";
-  root-size = "2G";
-  swap-size = "8G";
+  espSize = "512M";
+  swapSize = "8G";
 in {
-  fileSystems."/persist".neededForBoot = true;
-  
-  #services.logind.extraConfig = ''
-  #  RuntimeDirectorySize=32G
-  #'';
-  
   disko.devices = {
-    nodev."/" = {
-      fsType = "tmpfs";
-      mountOptions = [ "defaults" "size=${root-size}" "mode=755" ];
-    };
-    nodev."/build" = {
-      fsType = "tmpfs";
-      mountOptions = [ "defaults" "size=32G" "mode=755" ];
-    };
-    disk."${disk}" = {
-      device = "/dev/${disk}";
-      type = "disk";
-      content = {
-        type = "gpt";
-        partitions = {
-          ESP = {
-            size = "512M";
-            type = "EF00";
-            content = {
-              type = "filesystem";
-              format = "vfat";
-              mountpoint = "/boot";
+    disk = {
+      "${disk}" = {
+        device = "/dev/${disk}";
+        type = "disk";
+        content = {
+          type = "gpt";
+          partitions = {
+            ESP = {
+              size = "${espSize}";
+              type = "EF00";
+              content = {
+                type = "filesystem";
+                format = "vfat";
+                mountpoint = "/boot";
+                mountOptions = [ "defaults" ];
+              };
+            };
+            luks = {
+              size = "100%";
+              content = {
+                type = "luks";
+                name = "crypted";
+                settings.allowDiscards = true;
+                content = {
+                  type = "lvm_pv";
+                  vg = "root_vg";
+                };
+              };
             };
           };
-          luks = {
-            size = "100%";
+        };
+      };
+    };
+    lvm_vg = {
+      root_vg = {
+        type = "lvm_vg";
+        lvs = {
+          root = {
+            size = "100%FREE";
             content = {
-              type = "luks";
-              name = "crypted";
-              passwordFile = "/tmp/luks.key";
-              settings.allowDiscards = true;
-              content = {
-                type = "btrfs";
-                extraArgs = [ "-f" ];
-                subvolumes = {
-                  "/nix" = {
-                    mountpoint = "/nix";
-                    mountOptions = [ "compress=zstd" "noatime" ];
-                  };
-                  "/persist" = {
-                    mountpoint = "/persist";
-                    mountOptions = [ "compress=zstd" "noatime" ];
-                  };
-                  "/swap" = {
-                    mountpoint = "/swap";
-                    swap.swapfile.size = "${swap-size}";
-                  };
+              type = "btrfs";
+              extraArgs = [ "-f" ];
+              subvolumes = {
+                "/root" = {
+                  mountpoint = "/";
+                  mountOptions = [ "compress=zstd" "noatime" ];
+                };
+                "/nix" = {
+                  mountpoint = "/nix";
+                  mountOptions = [ "compress=zstd" "noatime" ];
+                };
+                "/persist" = {
+                  mountpoint = "/persist";
+                  mountOptions = [ "compress=zstd" "noatime" ];
+                };
+                "/swap" = {
+                  mountpoint = "/swap";
+                  swap.swapfile.size = "${swapSize}";
                 };
               };
             };
