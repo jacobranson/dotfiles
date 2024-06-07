@@ -23,15 +23,12 @@ pkgs.mkShell {
       }
       trap cleanup EXIT
 
-      etc="$temp/persist/etc"
-      ssh="$etc/ssh"
-
+      ssh="$temp/persist/etc/ssh"
       mkdir -p "$ssh" && chmod 755 "$ssh"
       sysdecrypt ssh_host_ed25519_key > "$ssh/ssh_host_ed25519_key"
       chmod 600 "$ssh/ssh_host_ed25519_key"
-
-      sysdecrypt machine-id > "$etc/machine-id"
-      chmod 644 "$etc/machine-id"
+      ssh-keygen -f "$ssh/ssh_host_ed25519_key" -y > "$ssh/ssh_host_ed25519_key.pub"
+      chmod 644 "$ssh/ssh_host_ed25519_key.pub"
 
       command nixos-anywhere "root@$ip" \
         --flake ".#$hostname" \
