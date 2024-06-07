@@ -2,7 +2,7 @@
 
 let
   user = "jacob";
-  hostname = "framework";
+  hostname = "framework-16-7040-amd";
   layout = "us";
   locale = "en_US.UTF-8";
   timezone = "America/New_York";
