@@ -24,6 +24,10 @@ in {
   # file, but since machine-id is world readable already, it makes no difference
   # here. at least we are keeping the machine-id out of public eyesight on the
   # git repo this way.
+  environment.etc.machine-id = {
+    text = (builtins.readFile config.age.secrets.machine-id.path);
+    mode = "0644";
+  };
   networking.hostId = (builtins.substring 0 8 (builtins.readFile config.age.secrets.machine-id.path));
 
   # Lanzaboote currently replaces the systemd-boot module.
@@ -58,9 +62,6 @@ in {
   networking.hostName = hostname;
   networking.networkmanager.enable = true;
   
-  # assign the machine id
-  environment.etc.machine-id.source = "/persist/etc/machine-id";
-
   # ensure the system can be accessed remotely via ssh
   services.openssh = {
     enable = true;
