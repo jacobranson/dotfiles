@@ -19,6 +19,13 @@ in {
   # linux kernel version to use
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
+  # this is normally an anti-pattern and security hole to read the machine-id
+  # secret directly into the nix config rather than reading it from a runtime
+  # file, but since machine-id is world readable already, it makes no difference
+  # here. at least we are keeping the machine-id out of public eyesight on the
+  # git repo this way.
+  networking.hostId = (builtins.substring 0 8 (builtins.readFile config.age.secrets.machine-id.path));
+
   # Lanzaboote currently replaces the systemd-boot module.
   # This setting is usually set to true in configuration.nix
   # generated at installation time. So we force it to false
@@ -140,6 +147,7 @@ in {
   # secrets for this machine
   age.secrets = {
     password.file = ./secrets/password.age;
+    machine-id.file = ./secrets/machine-id.age;
   };
 
   # configure the users of this system
