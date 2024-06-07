@@ -17,7 +17,7 @@ in {
   ];
 
   # linux kernel version to use
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   # Lanzaboote currently replaces the systemd-boot module.
   # This setting is usually set to true in configuration.nix
@@ -60,7 +60,7 @@ in {
     
     # ragenix uses this to determine which ssh keys to use for decryption
     hostKeys = [{
-      path = "/persist/etc/ssh/ssh_host_ed25519_key";
+      path = "/etc/ssh/ssh_host_ed25519_key";
       type = "ed25519";
     }];
   };
@@ -154,103 +154,6 @@ in {
   
   # fingerprint reader support
   # sudo fprintd-enroll $USER
-
-  # configure persistent files via impermanence
-  fileSystems."/persist".neededForBoot = true;
-  boot.initrd.services.lvm.enable = true;
-  boot.initrd.systemd.enable = true;
-  boot.initrd.systemd.services.rollback = {
-    description = "Rollback BTRFS root subvolume to a pristine state";
-    wantedBy = [
-      "initrd.target"
-    ];
-    after = [
-      # LUKS/TPM process
-      "systemd-cryptsetup@enc.service"
-    ];
-    before = [
-      "sysroot.mount"
-    ];
-    unitConfig.DefaultDependencies = "no";
-    serviceConfig.Type = "oneshot";
-    script = ''
-      mkdir -p /mnt
-      # We first mount the btrfs root to /mnt
-      # so we can manipulate btrfs subvolumes.
-      mount -o subvol=/ /dev/mapper/enc /mnt
-      # While we're tempted to just delete /root and create
-      # a new snapshot from /root-blank, /root is already
-      # populated at this point with a number of subvolumes,
-      # which makes `btrfs subvolume delete` fail.
-      # So, we remove them first.
-      #
-      # /root contains subvolumes:
-      # - /root/var/lib/portables
-      # - /root/var/lib/machines
-      #
-      # I suspect these are related to systemd-nspawn, but
-      # since I don't use it I'm not 100% sure.
-      # Anyhow, deleting these subvolumes hasn't resulted
-      # in any issues so far, except for fairly
-      # benign-looking errors from systemd-tmpfiles.
-      btrfs subvolume list -o /mnt/root |
-        cut -f9 -d' ' |
-        while read subvolume; do
-          echo "deleting /$subvolume subvolume..."
-          btrfs subvolume delete "/mnt/$subvolume"
-        done &&
-        echo "deleting /root subvolume..." &&
-        btrfs subvolume delete /mnt/root
-      echo "restoring blank /root subvolume..."
-      btrfs subvolume snapshot /mnt/root-blank /mnt/root
-      # Once we're done rolling back to a blank snapshot,
-      # we can unmount /mnt and continue on the boot process.
-      umount /mnt
-    '';
-  };
-
-  environment.persistence.persist.persistentStoragePath = "/persist";
-  environment.persistence.persist.hideMounts = true;
-  environment.persistence.persist = {
-    directories = [
-      # required by NixOS
-      "/var/lib/nixos"
-      "/var/lib/systemd"
-      "/var/log/journal"
-      
-      # Secure Boot
-      "/etc/secureboot"
-      
-      # Fingerprint Sensor
-      "/var/lib/fprint"
-      
-      # WiFi
-      "/etc/NetworkManager/system-connections"
-      
-      # Bluetooth
-      "/var/lib/bluetooth"
-    ];
-    users."${user}" = {
-      directories = [
-        "Desktop"
-        "Documents"
-        "Downloads"
-        "Music"
-        "Pictures"
-        "Projects"
-        "Public"
-        "Templates"
-        "Videos"
-        { directory = ".ssh"; mode = "0700"; }
-        ".local/share/keyrings"
-        ".config/dotfiles"
-        ".config/gh"
-      ];
-      files = [
-        ".bash_history"
-      ];
-    };
-  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
