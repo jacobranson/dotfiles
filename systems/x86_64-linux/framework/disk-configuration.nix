@@ -96,9 +96,9 @@ in {
           };
 
           # Wifi Connections
-          "encrypted/etc/NetworkManager/system-connections" = {
+          "encrypted/etc/NetworkManager" = {
             type = "zfs_fs";
-            mountpoint = "/etc/NetworkManager/system-connections";
+            mountpoint = "/etc/NetworkManager";
           };
 
           # Bluetooth Connections
