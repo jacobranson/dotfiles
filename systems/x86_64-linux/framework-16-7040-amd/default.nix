@@ -29,11 +29,16 @@ in {
   # file, but since machine-id is world readable already, it makes no difference
   # here. at least we are keeping the machine-id out of public eyesight on the
   # git repo this way.
-  environment.etc.machine-id = {
-    text = (builtins.readFile config.age.secrets.machine-id.path);
-    mode = "0644";
-  };
-  networking.hostId = (builtins.substring 0 8 (builtins.readFile config.age.secrets.machine-id.path));
+  # Shame that this doesn't actually work at all because it invalidates the
+  # pure evaluation of the flake.
+  # environment.etc.machine-id = {
+  #   text = (builtins.readFile config.age.secrets.machine-id.path);
+  #   mode = "0644";
+  # };
+  # networking.hostId = (builtins.substring 0 8 (builtins.readFile config.age.secrets.machine-id.path));
+
+  environment.etc.machine-id.text = "bac1836c53a64d5e90cc64cad1edcbe0";
+  networking.hostId = "bac1836c";
 
   # Lanzaboote currently replaces the systemd-boot module.
   # This setting is usually set to true in configuration.nix
