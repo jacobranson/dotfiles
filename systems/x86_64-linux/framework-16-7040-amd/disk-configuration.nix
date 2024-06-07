@@ -1,4 +1,4 @@
-{ config, inputs, ... }:
+{ config, inputs, pkgs, ... }:
 
 let
   disk = "nvme0n1";
