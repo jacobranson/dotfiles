@@ -45,7 +45,7 @@ in {
       zroot = {
         type = "zpool";
         rootFsOptions.canmount = "off";
-        postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zroot/encrypted/@blank$' || zfs snapshot zroot/encrypted/@blank";
+        postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zroot/encrypted/root@blank$' || zfs snapshot zroot/encrypted/root@blank";
         datasets = {
 
           # --- Encrypted Root Dataset ---
@@ -54,7 +54,7 @@ in {
             type = "zfs_fs";
             options.mountpoint = "none";
           };
-          "encrypted/" = {
+          "encrypted/root" = {
             type = "zfs_fs";
             mountpoint = "/";
           };
@@ -166,7 +166,7 @@ in {
     unitConfig.DefaultDependencies = "no";
     serviceConfig.Type = "oneshot";
     script = ''
-      zfs rollback -r zroot/encrypted/@blank && echo "rollback complete"
+      zfs rollback -r zroot/encrypted/root@blank && echo "rollback complete"
     '';
   };
 }
