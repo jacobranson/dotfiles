@@ -16,6 +16,11 @@ in {
     ./disk-configuration.nix
   ];
 
+  age.secrets = {
+    password.file = ./secrets/password.age;
+    machine-id.file = ./secrets/machine-id.age;
+  };
+
   # linux kernel version to use
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
@@ -144,12 +149,6 @@ in {
     sbctl # For debugging and troubleshooting Secure Boot.
     gh devbox
   ];
-
-  # secrets for this machine
-  age.secrets = {
-    password.file = ./secrets/password.age;
-    machine-id.file = ./secrets/machine-id.age;
-  };
 
   # configure the users of this system
   users.mutableUsers = false;
